@@ -1,11 +1,12 @@
-name: Node.js CI
+name: Convert atom to rss
 
 on:
+  push:
   schedule:
   - cron: "*/5 * * * *"
 
 jobs:
-  build:
+  convert:
     runs-on: ubuntu-latest
 
     steps:
