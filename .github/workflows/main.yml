@@ -1,0 +1,31 @@
+name: Node.js CI
+
+on:
+  schedule:
+  - cron: "/15 * * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+    - run: npm install saxon-js xml-js
+      
+    - run: curl https://mamaursa.net/collections/all.atom -o all.atom
+    - run: node convert_rss.js all.atom rss.xml
+    
+    - name: Commit files
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add rss.xml
+        git commit -m "Update rss.xml"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      #with:
+      # github_token: ${{ secrets.GITHUB_TOKEN }}
